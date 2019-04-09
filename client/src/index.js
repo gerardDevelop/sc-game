@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import MainScene from './Scenes/MainScene';
 import * as Phaser from 'phaser';
+import * as socketCluster from 'socketcluster-client';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -12,7 +13,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
+/*
 var config = {
     type: Phaser.WEBGL,
     pixelArt: true,
@@ -33,27 +34,29 @@ var config = {
 };
 
 var main = new Phaser.Game(config);
+*/
+var socket = socketCluster.connect({
+    port: 8000
+});
 
-var socket = socketCluster.connect();
+  socket.on('error', function (err) {
+    console.error(err);
+  });
 
-      socket.on('error', function (err) {
-        console.error(err);
-      });
+  socket.on('connect', function () {
+    console.log('Socket is connected');
+  });
 
-      socket.on('connect', function () {
-        console.log('Socket is connected');
-      });
+  socket.on('random', function (data) {
+    console.log('Received "random" event with data: ' + data.number);
+  });
 
-      socket.on('random', function (data) {
-        console.log('Received "random" event with data: ' + data.number);
-      });
+  var sampleChannel = socket.subscribe('sample');
 
-      var sampleChannel = socket.subscribe('sample');
+  sampleChannel.on('subscribeFail', function (err) {
+    console.error('Failed to subscribe to the sample channel due to error: ' + err);
+  });
 
-      sampleChannel.on('subscribeFail', function (err) {
-        console.error('Failed to subscribe to the sample channel due to error: ' + err);
-      });
-
-      sampleChannel.watch(function (num) {
-        console.log('Sample channel message:', num);
-      });
+  sampleChannel.watch(function (num) {
+    console.log('Sample channel message:', num);
+  });

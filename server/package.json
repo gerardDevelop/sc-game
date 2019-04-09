@@ -1,0 +1,37 @@
+{
+  "name": "sc-game",
+  "description": "A simple MMO PvP game",
+  "version": "1.0.0",
+  "contributors": [
+    {
+      "name": "Gerard Kerin",
+      "email": "gerard.develop@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "connect": "3.6.6",
+    "express": "4.16.3",
+    "minimist": "1.1.0",
+    "morgan": "^1.9.1",
+    "sc-errors": "^1.4.1",
+    "sc-framework-health-check": "^2.0.0",
+    "sc-hot-reboot": "^1.0.0",
+    "sc-uws": "^10.148.2",
+    "scc-broker-client": "^6.1.0",
+    "serve-static": "1.13.2",
+    "socketcluster": "^14.3.2",
+    "socketcluster-client": "^14.2.1"
+  },
+  "keywords": [
+    "websocket",
+    "server",
+    "realtime",
+    "cluster",
+    "scalable"
+  ],
+  "readmeFilename": "README.md",
+  "scripts": {
+    "start": "node server.js",
+    "start:docker": "node dockerwait.js && node ${SOCKETCLUSTER_MASTER_CONTROLLER:-server.js}"
+  }
+}
